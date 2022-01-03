@@ -1,25 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Callback from "./routes/callback";
+import Login from "./routes/login";
+// import MediaPlayer from "./routes/mediaPlayer";
+import Navigation from "./components/navigation";
+import Error from "./routes/error";
+import Home from "./routes/home";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <BrowserRouter>
+      <div className='App'>
+        <Navigation />
+        <Routes>
+          <Route path='/login' element={<Login />} />
+          <Route path='/callback' element={<Callback />} />
+          {/* <Route path='/mediaPlayer' element={<MediaPlayer />} /> */}
+          <Route path='/error' element={<Error />} />
+          <Route path='/home' element={<Home />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 }
 
