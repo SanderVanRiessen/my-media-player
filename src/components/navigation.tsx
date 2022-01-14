@@ -1,10 +1,12 @@
+import { Menu, MenuItem } from "@mui/material";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
-const navigation = () => {
+const Navigation = () => {
   return (
     <nav>
       <ul>
-        <Link to='/login'>
+        <Link to='/'>
           <li>Login</li>
         </Link>
         {/* <Link to='/mediaPlayer'>
@@ -18,4 +20,4 @@ const navigation = () => {
   );
 };
 
-export default navigation;
+export default Navigation;

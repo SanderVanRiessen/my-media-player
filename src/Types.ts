@@ -4,7 +4,7 @@ export interface errorMessage {
 export interface track {
     id: string; 
     name: string; 
-    uri?: string; 
+    uri: string; 
     artists: {name: string}[]; 
     onPressPlay: (id: string) => void;
 }
