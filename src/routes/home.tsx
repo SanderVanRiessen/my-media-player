@@ -1,13 +1,12 @@
 import { SpotifyGraphQLClient } from "spotify-graphql";
 import { useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
-import { LinearProgress, Box, Button, Grid } from "@mui/material";
-import { response, dataState, currentTrack } from "../Types";
+import { LinearProgress, Box, Button } from "@mui/material";
+import { response, dataState, album } from "../Types";
 import Album from "../components/albumList";
 import MediaPlayer from "../components/mediaPlayer";
 import dotenv from "dotenv";
 import ImageSlider from "../components/imageSlider";
-import { height } from "@mui/system";
 
 dotenv.config();
 declare var process: {
@@ -23,20 +22,22 @@ const Home = () => {
     data: null,
     error: null,
   });
-  const [currentTrack, setCurrentTrack] = useState<currentTrack>();
+  const [currentTrack, setCurrentTrack] = useState<string>();
+  const [currentAlbum, setCurrentAlbum] = useState<album>();
 
   const onPlayHandler = (id: string) => {
-    const track = state.data?.tracks.find((track) => track.id === id);
-    if (track) {
-      setCurrentTrack({
-        track,
-        albumName: state.data ? state.data.name : "empty",
-        images: state.data ? state.data.images : [{ url: "empty" }],
-      });
-    }
+    state.data?.forEach((album) => {
+      const searchTrack = album.tracks.find((track) => track.id === id);
+      if (searchTrack) {
+        setCurrentTrack(searchTrack.id);
+      }
+    });
   };
 
-  // const id = "33pt9HBdGlAbRGBHQgsZsU";
+  const setAlbumHandler = (id: string) => {
+    const album = state.data?.find((album) => album.id === id);
+    setCurrentAlbum(album);
+  };
 
   useEffect(() => {
     const config = {
@@ -47,25 +48,26 @@ const Home = () => {
     };
     SpotifyGraphQLClient(config)
       .query(
-        `{
-            album(id: "0xJyM0DFwty067hIBH5fql") {
-                name
-                images{
-                url
-                }
-                artists {
-                name
-                }
-                tracks{
-                id
-                name
-                uri
-                artists{
-                  name
-                }
-                }
-            }
-        }`
+        `  {
+    albums(ids: "0xJyM0DFwty067hIBH5fql,33pt9HBdGlAbRGBHQgsZsU,21jF5jlMtzo94wbxmJ18aa,6i6folBtxKV28WX3msQ4FE,0Y7qkJVZ06tS2GUCDptzyW,06mXfvDsRZNfnsGZvX2zpb") {
+    id
+    name
+    images{
+       url
+    }
+    artists {
+       name
+    }
+    tracks{
+      id
+      name
+      uri
+      artists{
+         name
+      }
+    }
+    }
+  }`
       )
       .then((result: response) => {
         if (result.errors) {
@@ -77,7 +79,7 @@ const Home = () => {
         } else {
           setState({
             loading: false,
-            data: result.data.album,
+            data: result.data.albums,
             error: null,
           });
         }
@@ -113,8 +115,12 @@ const Home = () => {
                     justifyContent: "center",
                     height: "30%",
                     width: "100%",
+                    paddingBottom: "10px",
                   }}>
-                  <ImageSlider />
+                  <ImageSlider
+                    albums={state.data}
+                    onClickImage={setAlbumHandler}
+                  />
                 </Box>
                 <Box
                   sx={{
@@ -126,10 +132,11 @@ const Home = () => {
                       width: "50%",
                     }}>
                     <Album
-                      tracks={state.data.tracks}
-                      name={state.data.name}
-                      artists={state.data.artists}
-                      images={state.data.images}
+                      id={currentAlbum?.id || state.data[0].id}
+                      tracks={currentAlbum?.tracks || state.data[0].tracks}
+                      name={currentAlbum?.name || state.data[0].name}
+                      artists={currentAlbum?.artists || state.data[0].artists}
+                      images={currentAlbum?.images || state.data[0].images}
                       onPressPlay={onPlayHandler}
                     />
                   </Box>
@@ -139,11 +146,7 @@ const Home = () => {
                       width: "50%",
                     }}>
                     {currentTrack ? (
-                      <MediaPlayer
-                        track={currentTrack.track}
-                        albumName={state.data.name}
-                        images={state.data.images}
-                      />
+                      <MediaPlayer trackUri={currentTrack} />
                     ) : (
                       <Box
                         sx={{
@@ -156,7 +159,7 @@ const Home = () => {
                           variant='contained'
                           onClick={onPlayHandler.bind(
                             null,
-                            state.data.tracks[0].id
+                            state.data[0].tracks[0].id
                           )}>
                           Play first song
                         </Button>

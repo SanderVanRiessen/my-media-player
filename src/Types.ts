@@ -10,6 +10,7 @@ export interface track {
 }
 
 export interface album {
+  id: string;
     name: string;
     artists: {name: string}[];
     tracks: track[];
@@ -18,18 +19,12 @@ export interface album {
 }
 
 export interface response {
-  data: {album: album};
+  data: {albums: album[]};
   errors?: errorMessage[];
 }
 
 export interface dataState {
     error: errorMessage[] | null;
     loading: boolean;
-    data: album | null
-}
-
-export interface currentTrack {
-    track: track;
-    albumName: string;
-    images: {url: string}[]
+    data: album[] | null
 }

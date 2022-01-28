@@ -7,34 +7,24 @@ import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import { album } from "../Types";
+import styled from "styled-components";
 
-const images = [
-  {
-    label: "San Francisco – Oakland Bay Bridge, United States",
-    imgPath:
-      "https://images.unsplash.com/photo-1537944434965-cf4679d1a598?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bird",
-    imgPath:
-      "https://images.unsplash.com/photo-1538032746644-0212e812a9e7?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-  {
-    label: "Bali, Indonesia",
-    imgPath:
-      "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=400&h=250&q=80",
-  },
-  {
-    label: "Goč, Serbia",
-    imgPath:
-      "https://images.unsplash.com/photo-1512341689857-198e7e2f3ca8?auto=format&fit=crop&w=400&h=250&q=60",
-  },
-];
+const ImageDiv = styled.div`
+  height: 70%;
+  display: flex;
+  justify-content: center;
+`;
 
-function SwipeableTextMobileStepper() {
+const SwipeableTextMobileStepper: React.FC<{
+  albums: album[];
+  onClickImage: (id: string) => void;
+}> = (props) => {
+  const { albums, onClickImage } = props;
+
   const theme = useTheme();
   const [activeStep, setActiveStep] = React.useState(0);
-  const maxSteps = images.length;
+  const maxSteps = albums.length;
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -43,10 +33,9 @@ function SwipeableTextMobileStepper() {
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-
-  const handleStepChange = (step: number) => {
-    setActiveStep(step);
-  };
+  React.useEffect(() => {
+    onClickImage(albums[activeStep].id);
+  }, [activeStep]);
 
   return (
     <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
@@ -59,25 +48,25 @@ function SwipeableTextMobileStepper() {
           alignItems: "center",
           pl: 2,
           bgcolor: "background.default",
+          justifyContent: "center",
         }}>
-        <Typography>{images[activeStep].label}</Typography>
+        <Typography>{albums[activeStep].name}</Typography>
       </Paper>
-      {images.map((step, index) => {
+      {albums.map((step, index) => {
         if (index === activeStep) {
           return (
-            <div key={step.label} style={{ height: "70%" }}>
+            <ImageDiv>
               <Box
                 component='img'
                 sx={{
                   display: "block",
                   height: "100%",
                   overflow: "hidden",
-                  width: "100%",
                 }}
-                src={step.imgPath}
-                alt={step.label}
+                src={step.images[0].url}
+                alt={step.name}
               />
-            </div>
+            </ImageDiv>
           );
         }
       })}
@@ -112,6 +101,6 @@ function SwipeableTextMobileStepper() {
       />
     </Box>
   );
-}
+};
 
 export default SwipeableTextMobileStepper;

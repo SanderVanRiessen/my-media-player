@@ -1,10 +1,8 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import { currentTrack } from "../Types";
 
-const MusicPlayerSlider: React.FC<currentTrack> = (props) => {
-  const { track } = props;
-  const splitTrackUri = track.uri.split(":");
+const MusicPlayerSlider: React.FC<{ trackUri: string }> = ({ trackUri }) => {
+  const splitTrackUri = trackUri.split(":");
   const spotifyTrackId = splitTrackUri[splitTrackUri.length - 1];
 
   return (
