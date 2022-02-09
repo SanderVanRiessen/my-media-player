@@ -33,6 +33,8 @@ const SwipeableTextMobileStepper: React.FC<{
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
+
+  //the eslint rule for this is interesting maybe check it out.
   React.useEffect(() => {
     onClickImage(albums[activeStep].id);
   }, [activeStep]);
@@ -49,15 +51,20 @@ const SwipeableTextMobileStepper: React.FC<{
           pl: 2,
           bgcolor: "background.default",
           justifyContent: "center",
-        }}>
+        }}
+      >
         <Typography>{albums[activeStep].name}</Typography>
       </Paper>
+      {/* 
+        to fix the eslint error here you could use a foreach.
+        maybe this could be a .find because you always return one result here right?
+        */}
       {albums.map((step, index) => {
         if (index === activeStep) {
           return (
             <ImageDiv>
               <Box
-                component='img'
+                component="img"
                 sx={{
                   display: "block",
                   height: "100%",
@@ -73,13 +80,14 @@ const SwipeableTextMobileStepper: React.FC<{
 
       <MobileStepper
         steps={maxSteps}
-        position='static'
+        position="static"
         activeStep={activeStep}
         nextButton={
           <Button
-            size='small'
+            size="small"
             onClick={handleNext}
-            disabled={activeStep === maxSteps - 1}>
+            disabled={activeStep === maxSteps - 1}
+          >
             Next
             {theme.direction === "rtl" ? (
               <KeyboardArrowLeft />
@@ -89,7 +97,7 @@ const SwipeableTextMobileStepper: React.FC<{
           </Button>
         }
         backButton={
-          <Button size='small' onClick={handleBack} disabled={activeStep === 0}>
+          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
             {theme.direction === "rtl" ? (
               <KeyboardArrowRight />
             ) : (

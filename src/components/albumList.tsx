@@ -26,11 +26,12 @@ const Album: React.FC<album> = (props) => {
         bgcolor: "background.paper",
         padding: "0",
       }}
-      subheader={<li />}>
+      subheader={<li />}
+    >
       <ListSubheader sx={{ padding: 0 }}>
-        <ListItem alignItems='flex-start'>
+        <ListItem alignItems="flex-start">
           <ListItemAvatar>
-            <Avatar alt='spotify img' src={images[0].url} />
+            <Avatar alt="spotify img" src={images[0].url} />
           </ListItemAvatar>
           <ListItemText
             primary={name}
@@ -43,7 +44,7 @@ const Album: React.FC<album> = (props) => {
             }
           />
         </ListItem>
-        <Divider variant='inset' component='li' />
+        <Divider variant="inset" component="li" />
       </ListSubheader>
       {tracks.map((track) => {
         return (

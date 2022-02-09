@@ -9,6 +9,7 @@ import dotenv from "dotenv";
 import ImageSlider from "../components/imageSlider";
 
 dotenv.config();
+//if you dont change this variable, it can be a constant
 declare var process: {
   env: {
     CLIENTID: string;
@@ -17,6 +18,7 @@ declare var process: {
 };
 
 const Home = () => {
+  //whats in this state maybe the name should be a bit more describing?
   const [state, setState] = useState<dataState>({
     loading: true,
     data: null,
@@ -46,6 +48,7 @@ const Home = () => {
       redirectUri: "http://www.example.com/callback",
       accessToken: localStorage.getItem("token")!,
     };
+    //not really feedback but more a suggestion, maybe u can store the actuall queries in a seperate file so the code looks cleaner
     SpotifyGraphQLClient(config)
       .query(
         `  {
@@ -89,7 +92,7 @@ const Home = () => {
   if (localStorage.getItem("token")) {
     return (
       <Box>
-        {state.error && <Navigate to='/error' />}
+        {state.error && <Navigate to="/error" />}
         {state.loading && <LinearProgress />}
         {state.data && (
           <>
@@ -101,14 +104,16 @@ const Home = () => {
                 alignItems: "center",
                 height: "100vh",
                 flexGrow: "1",
-              }}>
+              }}
+            >
               <Box
                 sx={{
                   display: "flex",
                   flexDirection: "column",
                   width: "60%",
                   height: "80%",
-                }}>
+                }}
+              >
                 <Box
                   sx={{
                     display: "flex",
@@ -116,7 +121,8 @@ const Home = () => {
                     height: "30%",
                     width: "100%",
                     paddingBottom: "10px",
-                  }}>
+                  }}
+                >
                   <ImageSlider
                     albums={state.data}
                     onClickImage={setAlbumHandler}
@@ -126,11 +132,14 @@ const Home = () => {
                   sx={{
                     display: "flex",
                     height: "70%",
-                  }}>
+                  }}
+                >
                   <Box
                     sx={{
                       width: "50%",
-                    }}>
+                    }}
+                  >
+                    {/*i dont know if currentAlbum?.id is a good practice since u also already enforce it in the album type u created */}
                     <Album
                       id={currentAlbum?.id || state.data[0].id}
                       tracks={currentAlbum?.tracks || state.data[0].tracks}
@@ -144,7 +153,8 @@ const Home = () => {
                     sx={{
                       border: "1px solid black",
                       width: "50%",
-                    }}>
+                    }}
+                  >
                     {currentTrack ? (
                       <MediaPlayer trackUri={currentTrack} />
                     ) : (
@@ -154,13 +164,15 @@ const Home = () => {
                           justifyContent: "center",
                           alignItems: "center",
                           height: "100%",
-                        }}>
+                        }}
+                      >
                         <Button
-                          variant='contained'
+                          variant="contained"
                           onClick={onPlayHandler.bind(
                             null,
                             state.data[0].tracks[0].id
-                          )}>
+                          )}
+                        >
                           Play first song
                         </Button>
                       </Box>
@@ -174,7 +186,7 @@ const Home = () => {
       </Box>
     );
   } else {
-    return <Navigate to='/' />;
+    return <Navigate to="/" />;
   }
 };
 
