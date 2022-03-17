@@ -19,8 +19,6 @@ const Album: React.FC<album> = (props) => {
       sx={{
         width: "100%",
         height: "100%",
-        // maxWidth: 360,
-        // maxHeight: "inherit",
         position: "relative",
         overflow: "auto",
         bgcolor: "background.paper",

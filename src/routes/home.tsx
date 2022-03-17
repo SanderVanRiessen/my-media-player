@@ -7,6 +7,7 @@ import Album from "../components/albumList";
 import MediaPlayer from "../components/mediaPlayer";
 import dotenv from "dotenv";
 import ImageSlider from "../components/imageSlider";
+import SearchButton from "../components/searchAlbum";
 
 dotenv.config();
 declare var process: {
@@ -48,7 +49,7 @@ const Home = () => {
     };
     SpotifyGraphQLClient(config)
       .query(
-        `  {
+        ` {
     albums(ids: "0xJyM0DFwty067hIBH5fql,33pt9HBdGlAbRGBHQgsZsU,21jF5jlMtzo94wbxmJ18aa,6i6folBtxKV28WX3msQ4FE,0Y7qkJVZ06tS2GUCDptzyW,06mXfvDsRZNfnsGZvX2zpb") {
     id
     name
@@ -67,7 +68,7 @@ const Home = () => {
       }
     }
     }
-  }`
+  } `
       )
       .then((result: response) => {
         if (result.errors) {
@@ -120,6 +121,10 @@ const Home = () => {
                   <ImageSlider
                     albums={state.data}
                     onClickImage={setAlbumHandler}
+                  />
+                  <SearchButton
+                    currentData={state.data}
+                    setAlbum={setAlbumHandler}
                   />
                 </Box>
                 <Box

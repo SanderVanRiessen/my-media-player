@@ -10,7 +10,7 @@ export interface track {
 }
 
 export interface album {
-  id: string;
+    id: string;
     name: string;
     artists: {name: string}[];
     tracks: track[];
@@ -20,6 +20,10 @@ export interface album {
 
 export interface response {
   data: {albums: album[]};
+  errors?: errorMessage[];
+}
+export interface searchResponse {
+  data: {album: album};
   errors?: errorMessage[];
 }
 
