@@ -18,3 +18,25 @@ export const getDefaultAlbums = ` {
     }
     }
   } `;
+
+export const searchAlbums = (searchValue: string) =>
+  ` {
+          albums(name: "${searchValue}"){
+            id
+            name
+            images{
+              url
+            }
+            artists {
+              name
+            }
+            tracks{
+              id
+              name
+              uri
+              artists{
+                name
+              }
+            }
+          }
+        } `;

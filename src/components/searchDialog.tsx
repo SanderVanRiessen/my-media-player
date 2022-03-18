@@ -16,6 +16,7 @@ import { Search } from "@mui/icons-material";
 import { Fragment, useState } from "react";
 import { SpotifyGraphQLClient } from "spotify-graphql";
 import { album, errorMessage, response } from "../Types";
+import { searchAlbums } from "../queries";
 
 declare var process: {
   env: {
@@ -35,7 +36,7 @@ const SimpleDialog: React.FC<SimpleDialogProps> = (
   props: SimpleDialogProps
 ) => {
   const { onClose, open, currentData, setAlbum } = props;
-  const [searchValue, setSearchValue] = useState<string>();
+  const [searchValue, setSearchValue] = useState<string>("");
   const [findAlbum, setFindAlbum] = useState<{
     empty: boolean;
     error: errorMessage[] | null;
@@ -57,28 +58,7 @@ const SimpleDialog: React.FC<SimpleDialogProps> = (
       accessToken: localStorage.getItem("token")!,
     };
     SpotifyGraphQLClient(config)
-      .query(
-        ` {
-          albums(name: "${searchValue}"){
-            id
-            name
-            images{
-              url
-            }
-            artists {
-              name
-            }
-            tracks{
-              id
-              name
-              uri
-              artists{
-                name
-              }
-            }
-          }
-        } `
-      )
+      .query(searchAlbums(searchValue))
       .then((result: response) => {
         console.log(result);
         if (result.errors) {
