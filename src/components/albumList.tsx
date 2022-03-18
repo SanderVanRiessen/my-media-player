@@ -8,10 +8,10 @@ import {
   Avatar,
   ListSubheader,
 } from "@mui/material";
-import * as React from "react";
+import { FC, Fragment } from "react";
 import { album } from "../Types";
 
-const Album: React.FC<album> = (props) => {
+const Album: FC<album> = (props) => {
   const { name, artists, tracks, images, onPressPlay } = props;
 
   return (
@@ -26,22 +26,22 @@ const Album: React.FC<album> = (props) => {
       }}
       subheader={<li />}>
       <ListSubheader sx={{ padding: 0 }}>
-        <ListItem alignItems='flex-start'>
+        <ListItem alignItems="flex-start">
           <ListItemAvatar>
-            <Avatar alt='spotify img' src={images[0].url} />
+            <Avatar alt="spotify img" src={images[0].url} />
           </ListItemAvatar>
           <ListItemText
             primary={name}
             secondary={
-              <React.Fragment>
+              <Fragment>
                 {artists.map((artist) => {
                   return artist.name + " - ";
                 })}
-              </React.Fragment>
+              </Fragment>
             }
           />
         </ListItem>
-        <Divider variant='inset' component='li' />
+        <Divider variant="inset" component="li" />
       </ListSubheader>
       {tracks.map((track) => {
         return (

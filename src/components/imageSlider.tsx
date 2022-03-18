@@ -1,4 +1,4 @@
-import * as React from "react";
+import { FC, useEffect, useState } from "react";
 import { useTheme } from "@mui/material/styles";
 import Box from "@mui/material/Box";
 import MobileStepper from "@mui/material/MobileStepper";
@@ -16,14 +16,14 @@ const ImageDiv = styled.div`
   justify-content: center;
 `;
 
-const SwipeableTextMobileStepper: React.FC<{
+const SwipeableTextMobileStepper: FC<{
   albums: album[];
   onClickImage: (id: string) => void;
 }> = (props) => {
   const { albums, onClickImage } = props;
 
   const theme = useTheme();
-  const [activeStep, setActiveStep] = React.useState(0);
+  const [activeStep, setActiveStep] = useState(0);
   const maxSteps = albums.length;
 
   const handleNext = () => {
@@ -33,7 +33,7 @@ const SwipeableTextMobileStepper: React.FC<{
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
-  React.useEffect(() => {
+  useEffect(() => {
     onClickImage(albums[activeStep].id);
   }, [activeStep]);
 
@@ -53,11 +53,11 @@ const SwipeableTextMobileStepper: React.FC<{
         <Typography>{albums[activeStep].name}</Typography>
       </Paper>
       {albums.map((step, index) => {
-        if (index === activeStep) {
-          return (
+        return (
+          index === activeStep && (
             <ImageDiv>
               <Box
-                component='img'
+                component="img"
                 sx={{
                   display: "block",
                   height: "100%",
@@ -67,17 +67,17 @@ const SwipeableTextMobileStepper: React.FC<{
                 alt={step.name}
               />
             </ImageDiv>
-          );
-        }
+          )
+        );
       })}
 
       <MobileStepper
         steps={maxSteps}
-        position='static'
+        position="static"
         activeStep={activeStep}
         nextButton={
           <Button
-            size='small'
+            size="small"
             onClick={handleNext}
             disabled={activeStep === maxSteps - 1}>
             Next
@@ -89,7 +89,7 @@ const SwipeableTextMobileStepper: React.FC<{
           </Button>
         }
         backButton={
-          <Button size='small' onClick={handleBack} disabled={activeStep === 0}>
+          <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
             {theme.direction === "rtl" ? (
               <KeyboardArrowRight />
             ) : (

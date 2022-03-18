@@ -16,9 +16,9 @@ const convertHashUrltoObject = (hash: string) => {
 const callback = () => {
   if (window.location.hash) {
     convertHashUrltoObject(window.location.hash);
-    return <Navigate to='/home' />;
+    return <Navigate to="/home" />;
   }
-  return <Navigate to='/error' />;
+  return <Navigate to="/error" />;
 };
 
 export default callback;

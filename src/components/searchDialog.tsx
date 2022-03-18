@@ -128,16 +128,16 @@ const SimpleDialog: React.FC<SimpleDialogProps> = (
           }}>
           <Box>
             <TextField
-              label='Search'
-              color='primary'
+              label="Search"
+              color="primary"
               value={searchValue}
               onChange={handleChange}
             />
           </Box>
           <Box sx={{ margin: "auto 0" }}>
             <IconButton
-              color='primary'
-              aria-label='add to shopping cart'
+              color="primary"
+              aria-label="add to shopping cart"
               onClick={getSearchAblum}
               sx={{ marginLeft: "10px" }}>
               <Search />
@@ -162,9 +162,9 @@ const SimpleDialog: React.FC<SimpleDialogProps> = (
                   <ListSubheader
                     sx={{ padding: 0 }}
                     onClick={setSearchAlbum.bind(null, album)}>
-                    <ListItem alignItems='flex-start'>
+                    <ListItem alignItems="flex-start">
                       <ListItemAvatar>
-                        <Avatar alt='spotify img' src={album.images[0].url} />
+                        <Avatar alt="spotify img" src={album.images[0].url} />
                       </ListItemAvatar>
                       <ListItemText
                         primary={album.name}

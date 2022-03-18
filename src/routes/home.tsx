@@ -8,9 +8,10 @@ import MediaPlayer from "../components/mediaPlayer";
 import dotenv from "dotenv";
 import ImageSlider from "../components/imageSlider";
 import SearchButton from "../components/searchAlbum";
+import { getDefaultAlbums } from "../queries";
 
 dotenv.config();
-declare var process: {
+declare const process: {
   env: {
     CLIENTID: string;
     CLIENTSECRET: string;
@@ -18,7 +19,7 @@ declare var process: {
 };
 
 const Home = () => {
-  const [state, setState] = useState<dataState>({
+  const [queryResults, setQueryResults] = useState<dataState>({
     loading: true,
     data: null,
     error: null,
@@ -27,7 +28,7 @@ const Home = () => {
   const [currentAlbum, setCurrentAlbum] = useState<album>();
 
   const onPlayHandler = (id: string) => {
-    state.data?.forEach((album) => {
+    queryResults.data?.forEach((album) => {
       const searchTrack = album.tracks.find((track) => track.id === id);
       if (searchTrack) {
         setCurrentTrack(searchTrack.id);
@@ -36,7 +37,7 @@ const Home = () => {
   };
 
   const setAlbumHandler = (id: string) => {
-    const album = state.data?.find((album) => album.id === id);
+    const album = queryResults.data?.find((album) => album.id === id);
     setCurrentAlbum(album);
   };
 
@@ -48,41 +49,21 @@ const Home = () => {
       accessToken: localStorage.getItem("token")!,
     };
     SpotifyGraphQLClient(config)
-      .query(
-        ` {
-    albums(ids: "0xJyM0DFwty067hIBH5fql,33pt9HBdGlAbRGBHQgsZsU,21jF5jlMtzo94wbxmJ18aa,6i6folBtxKV28WX3msQ4FE,0Y7qkJVZ06tS2GUCDptzyW,06mXfvDsRZNfnsGZvX2zpb") {
-    id
-    name
-    images{
-       url
-    }
-    artists {
-       name
-    }
-    tracks{
-      id
-      name
-      uri
-      artists{
-         name
-      }
-    }
-    }
-  } `
-      )
+      .query(getDefaultAlbums)
       .then((result: response) => {
         if (result.errors) {
-          setState({
+          setQueryResults({
             loading: false,
             data: null,
             error: result.errors,
           });
         } else {
-          setState({
+          setQueryResults({
             loading: false,
             data: result.data.albums,
             error: null,
           });
+          setCurrentAlbum(result.data.albums[0]);
         }
       });
   }, []);
@@ -90,9 +71,9 @@ const Home = () => {
   if (localStorage.getItem("token")) {
     return (
       <Box>
-        {state.error && <Navigate to='/error' />}
-        {state.loading && <LinearProgress />}
-        {state.data && (
+        {queryResults.error && <Navigate to="/error" />}
+        {(queryResults.loading || currentAlbum == null) && <LinearProgress />}
+        {queryResults.data && currentAlbum && (
           <>
             <Box
               sx={{
@@ -119,11 +100,11 @@ const Home = () => {
                     paddingBottom: "10px",
                   }}>
                   <ImageSlider
-                    albums={state.data}
+                    albums={queryResults.data}
                     onClickImage={setAlbumHandler}
                   />
                   <SearchButton
-                    currentData={state.data}
+                    currentData={queryResults.data}
                     setAlbum={setAlbumHandler}
                   />
                 </Box>
@@ -137,11 +118,11 @@ const Home = () => {
                       width: "50%",
                     }}>
                     <Album
-                      id={currentAlbum?.id || state.data[0].id}
-                      tracks={currentAlbum?.tracks || state.data[0].tracks}
-                      name={currentAlbum?.name || state.data[0].name}
-                      artists={currentAlbum?.artists || state.data[0].artists}
-                      images={currentAlbum?.images || state.data[0].images}
+                      id={currentAlbum.id}
+                      tracks={currentAlbum.tracks}
+                      name={currentAlbum.name}
+                      artists={currentAlbum.artists}
+                      images={currentAlbum.images}
                       onPressPlay={onPlayHandler}
                     />
                   </Box>
@@ -161,10 +142,10 @@ const Home = () => {
                           height: "100%",
                         }}>
                         <Button
-                          variant='contained'
+                          variant="contained"
                           onClick={onPlayHandler.bind(
                             null,
-                            state.data[0].tracks[0].id
+                            queryResults.data[0].tracks[0].id
                           )}>
                           Play first song
                         </Button>
@@ -179,7 +160,7 @@ const Home = () => {
       </Box>
     );
   } else {
-    return <Navigate to='/' />;
+    return <Navigate to="/" />;
   }
 };
 

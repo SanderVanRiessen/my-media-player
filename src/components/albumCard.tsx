@@ -1,32 +1,32 @@
-import * as React from "react";
+import { FC, Fragment } from "react";
 import { ListItem, Divider, ListItemText, Typography } from "@mui/material";
 import { track } from "../Types";
 
-const Card: React.FC<track> = (props) => {
+const Card: FC<track> = (props) => {
   const { name, artists, onPressPlay, id } = props;
 
   return (
     <>
-      <ListItem alignItems='flex-start'>
+      <ListItem alignItems="flex-start">
         <ListItemText
           primary={name}
           secondary={
-            <React.Fragment>
+            <Fragment>
               <Typography
                 sx={{ display: "inline" }}
-                component='span'
-                variant='body2'
-                color='text.primary'>
+                component="span"
+                variant="body2"
+                color="text.primary">
                 {artists.map((artist) => {
                   return artist.name + " - ";
                 })}
               </Typography>
-            </React.Fragment>
+            </Fragment>
           }
         />
         <button onClick={onPressPlay.bind(null, id)}>play</button>
       </ListItem>
-      <Divider variant='inset' component='li' />
+      <Divider variant="inset" component="li" />
     </>
   );
 };
