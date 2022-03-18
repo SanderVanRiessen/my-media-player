@@ -71,7 +71,12 @@ const Home = () => {
   if (localStorage.getItem("token")) {
     return (
       <Box>
-        {queryResults.error && <Navigate to="/error" />}
+        {queryResults.error && (
+          <Navigate
+            to="/error"
+            state={{ error: queryResults.error[0].message }}
+          />
+        )}
         {(queryResults.loading || currentAlbum == null) && <LinearProgress />}
         {queryResults.data && currentAlbum && (
           <>
