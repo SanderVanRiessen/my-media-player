@@ -2,14 +2,11 @@ import { FC } from "react";
 import Box from "@mui/material/Box";
 
 const MusicPlayerSlider: FC<{ trackUri: string }> = ({ trackUri }) => {
-  const splitTrackUri = trackUri.split(":");
-  const spotifyTrackId = splitTrackUri[splitTrackUri.length - 1];
-
   return (
     <Box sx={{ width: "100%", height: "100%" }}>
       <iframe
         title="Media Player"
-        src={"https://open.spotify.com/embed/track/" + spotifyTrackId}
+        src={"https://open.spotify.com/embed/track/" + trackUri}
         width="100%"
         height="100%"
         frameBorder="0"
