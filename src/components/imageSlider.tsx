@@ -35,7 +35,7 @@ const SwipeableTextMobileStepper: FC<{
   };
   useEffect(() => {
     onClickImage(albums[activeStep].id);
-  }, [activeStep]);
+  }, [activeStep, albums, onClickImage]);
 
   return (
     <Box sx={{ maxWidth: 400, flexGrow: 1 }}>
