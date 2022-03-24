@@ -14,7 +14,7 @@ const Error = () => {
   };
   return (
     <>
-      <h1>{state.error || "Something went wrongs"}</h1>
+      <h1>{state.error || "Something went wrong"}</h1>
       <Button onClick={onClickHandler}>Please try again</Button>
     </>
   );

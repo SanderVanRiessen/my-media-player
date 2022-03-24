@@ -11,7 +11,7 @@ const Background = () => {
   };
   return (
     <>
-      <h1>hello world</h1>
+      <h1>login with spotify</h1>
       <button onClick={handleclick}>spotify login</button>
     </>
   );
